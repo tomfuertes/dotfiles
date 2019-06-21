@@ -18,7 +18,7 @@ ulimit -n 2560
 
 function custom-brew-install() {
   # TomF Specific brews
-  brew install bash
+  # brew install bash
   # brew install bash-completion
   brew install brew-cask
   brew install casperjs
@@ -41,7 +41,7 @@ function custom-brew-install() {
   brew install sqlite
   brew install the_silver_searcher
   brew install tree
-  # brew install wget
+  brew install wget
   brew install z
 
   # Install Node.js. Note: this installs `npm` too, using the recommended
