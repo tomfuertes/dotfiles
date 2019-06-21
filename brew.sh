@@ -96,36 +96,5 @@ brew install tree
 brew install vbindiff
 brew install zopfli
 
-# TomF Specific brews
-brew install bash
-brew install bash-completion
-brew install brew-cask
-brew install casperjs
-brew install gist
-brew install git-flow-avh
-brew install git-now
-brew install heroku-toolbelt
-brew install imagemagick
-brew install jpeg
-brew install memcached
-brew install mercurial
-brew install ngrok
-brew install node
-brew install openssl
-brew install phantomjs
-brew install postgresql
-brew install python
-brew install redis
-brew install s3cmd
-brew install sqlite
-brew install the_silver_searcher
-brew install tree
-brew install wget
-brew install z
-
-# Install Node.js. Note: this installs `npm` too, using the recommended
-# installation method.
-brew install node
-
 # Remove outdated versions from the cellar.
 brew cleanup

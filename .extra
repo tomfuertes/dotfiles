@@ -16,6 +16,39 @@ ulimit -n 2560
 # export NVM_DIR="/Users/tomfuertes/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
+function custom-brew-install() {
+  # TomF Specific brews
+  brew install bash
+  # brew install bash-completion
+  brew install brew-cask
+  brew install casperjs
+  brew install gist
+  brew install git-flow-avh
+  brew install git-now
+  brew install heroku-toolbelt
+  brew install imagemagick
+  brew install jpeg
+  brew install memcached
+  brew install mercurial
+  brew install ngrok
+  brew install node
+  brew install openssl
+  brew install phantomjs
+  brew install postgresql
+  brew install python
+  brew install redis
+  brew install s3cmd
+  brew install sqlite
+  brew install the_silver_searcher
+  brew install tree
+  # brew install wget
+  brew install z
+
+  # Install Node.js. Note: this installs `npm` too, using the recommended
+  # installation method.
+  brew install node
+}
+
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 
 # minor aliases
