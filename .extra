@@ -7,7 +7,7 @@ GIT_AUTHOR_EMAIL="tomfuertes@gmail.com"
 GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 
-git config --global push.default simple
+git config --global push.default current
 git config --global fetch.prune true # http://stackoverflow.com/a/8255687/94668
 
 # ulimit
@@ -64,12 +64,15 @@ alias todo="subl ~/Dropbox/todo.txt"
 # http://stackoverflow.com/a/26803738/94668
 alias prune='git branch --merged | grep -v "\*" | egrep -v "master\|development" | xargs -n 1 git branch -d'
 
+# subl -> code
+alias subl=code
+
 # Larger bash history (default is 500)
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 
 # Misc settings
-export EDITOR='subl -w'
+export EDITOR='code -w'
 
 alias clean='find . -name "*.pyc" -delete; find . -name ".DS_Store" -delete; if [ -d .git ]; then git clean -fdx -- tmp; fi;'
 
