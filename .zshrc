@@ -12,7 +12,7 @@ autoload -U +X bashcompinit && bashcompinit
 autoload -U +X compinit && compinit
 
 # git clone https://github.com/lukechilds/zsh-nvm.git ~/.zsh-nvm
-source ~/.zsh-nvm/zsh-nvm.plugin.zsh
+[[ -s "~/.zsh-nvm/zsh-nvm.plugin.zsh" ]] && source ~/.zsh-nvm/zsh-nvm.plugin.zsh
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
