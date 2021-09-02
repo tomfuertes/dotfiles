@@ -13,6 +13,7 @@ git config --global pull.rebase true
 git config --global alias.st status
 git config --global alias.ci commit
 git config --global commit.gpgsign false
+git config --global merge.ff no
 
 # ulimit
 ulimit -n 2560
