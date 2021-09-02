@@ -12,6 +12,19 @@ git config --global fetch.prune true # http://stackoverflow.com/a/8255687/94668
 git config --global pull.rebase true
 git config --global alias.st status
 git config --global alias.ci commit
+git config --global alias.fs 'flow feature start'
+git config --global alias.ff 'flow feature finish'
+git config --global alias.fl 'flow feature list'
+git config --global alias.fc 'flow feature checkout'
+git config --global alias.fr 'flow feature rebase'
+git config --global alias.rs 'flow release start'
+git config --global alias.rf 'flow release finish'
+git config --global alias.rl 'flow release list'
+git config --global alias.rc 'flow release checkout'
+git config --global alias.hs 'flow hotfix start'
+git config --global alias.hf 'flow hotfix finish'
+git config --global alias.hl 'flow hotfix list'
+git config --global alias.hc 'flow hotfix checkout'
 git config --global commit.gpgsign false
 git config --global merge.ff no
 
@@ -34,6 +47,7 @@ function custom-brew-install() {
   brew install bash
   brew install bash-completion
   brew install gh
+  brew install git-flow
   brew tap heroku/brew && brew install heroku
   brew uninstall node
   brew install nvm
