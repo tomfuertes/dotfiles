@@ -7,6 +7,9 @@ GIT_AUTHOR_EMAIL="tomfuertes@gmail.com"
 GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 
+# Not a config for this but don't want to edit merge messages locally
+export GIT_MERGE_AUTOEDIT=no
+
 git config --global push.default current
 git config --global fetch.prune true # http://stackoverflow.com/a/8255687/94668
 git config --global pull.rebase true
