@@ -128,15 +128,16 @@ alias up="\
   gup; \
   notice 'Brew Update'; \
   brup; \
-  # notice 'NPM Update'; \
-  # nup; \
-  # notice 'Gem Update'; \
-  # gemup; \
-  # notice 'Pip Update'; \
-  # pup; \
-  # notice '~/.dotfiles Update'; \
-  # dup; \
 "
+#   notice 'NPM Update'; \
+#   nup; \
+#   notice 'Gem Update'; \
+#   gemup; \
+#   notice 'Pip Update'; \
+#   pup; \
+#   notice '~/.dotfiles Update'; \
+#   dup; \
+#"
 
 function gg() {
   if [ $# -gt 0 ]; then
