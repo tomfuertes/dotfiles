@@ -47,8 +47,8 @@ export NVM_DIR="$HOME/.nvm"
 
 function custom-brew-install() {
   # TomF Specific brews
-  brew install bash
-  brew install bash-completion
+  # brew install bash
+  # brew install bash-completion
   brew install gh
   brew install git-flow
   brew tap heroku/brew && brew install heroku
