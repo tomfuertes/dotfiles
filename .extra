@@ -1,3 +1,22 @@
+# TomF Specific brews and startup installs
+function custom-brew-install() {
+  # cat ~/.zshrc and run those
+  mkdir -p "$HOME/.nvm"
+  mkdir -p "$HOME/.zsh"
+  
+  # download + install homebrew
+  brew install gh
+  brew install git-flow
+  brew tap heroku/brew && brew install heroku
+  brew uninstall node
+  brew install nvm
+  brew install redis
+  brew install the_silver_searcher
+  brew install wget
+  brew install z
+}
+
+
 # Git credentials
 # Not in the repository, to prevent people from accidentally committing under my name
 GIT_AUTHOR_NAME="Tom Fuertes"
@@ -31,6 +50,9 @@ git config --global alias.hc 'flow hotfix checkout'
 git config --global commit.gpgsign false
 git config --global merge.ff no
 
+# Add Visual Studio Code (code)
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
 # ulimit
 ulimit -n 2560
 
@@ -42,23 +64,8 @@ export RBENV_ROOT=/usr/local/var/rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-function custom-brew-install() {
-  # TomF Specific brews
-  # brew install bash
-  # brew install bash-completion
-  brew install gh
-  brew install git-flow
-  brew tap heroku/brew && brew install heroku
-  brew uninstall node
-  brew install nvm
-  brew install redis
-  brew install the_silver_searcher
-  brew install wget
-  brew install z
-}
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 

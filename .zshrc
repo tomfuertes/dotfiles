@@ -4,14 +4,14 @@
 # export PATH="$HOME/bin:$PATH";
 # export PATH="$PATH:/usr/local/sbin"
 # export PATH="$HOME/.cargo/bin:$PATH";
-# mkdir -p "$HOME/.zsh"
-# git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+# INSTALL: mkdir -p "$HOME/.zsh"
+# INSTALL: git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 fpath+=$HOME/.zsh/pure
 
 autoload -U +X bashcompinit && bashcompinit
 autoload -U +X compinit && compinit
 
-# git clone https://github.com/lukechilds/zsh-nvm.git ~/.zsh-nvm
+# INSTALL: git clone https://github.com/lukechilds/zsh-nvm.git ~/.zsh-nvm
 [[ -s "~/.zsh-nvm/zsh-nvm.plugin.zsh" ]] && source ~/.zsh-nvm/zsh-nvm.plugin.zsh
 
 # Load the shell dotfiles, and then some:
@@ -25,10 +25,6 @@ unset file;
 
 autoload -U promptinit; promptinit
 prompt pure
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # place this after nvm initialization!
 autoload -U add-zsh-hook
