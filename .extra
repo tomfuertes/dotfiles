@@ -70,7 +70,7 @@ export NVM_DIR="$HOME/.nvm"
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 
 # minor aliases
-alias ll=la
+alias ll="la -h"
 
 # brew install z.sh
 alias j=z
