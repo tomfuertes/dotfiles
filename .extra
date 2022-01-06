@@ -3,7 +3,7 @@ function custom-brew-install() {
   # cat ~/.zshrc and run those
   mkdir -p "$HOME/.nvm"
   mkdir -p "$HOME/.zsh"
-  
+
   # download + install homebrew
   brew install gh
   brew install git-flow
@@ -184,3 +184,4 @@ function gz() {
 }
 
 alias c="clear"
+alias G="gh browse"
