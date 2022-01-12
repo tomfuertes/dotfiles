@@ -107,17 +107,17 @@ export EDITOR='code -w'
 
 alias clean='find . -name "*.pyc" -delete; find . -name ".DS_Store" -delete; if [ -d .git ]; then git clean -fdx -- tmp; fi;'
 
-# ### NOTICES ###
-# # Notice title
-# notice() { echo -e "\033[1;32m=> $1\033[0m"; }
-# # Notice title
-# msg() { echo -e "\033[1;34m=> $1\033[0m"; }
-# # Error title
-# error() { echo -e "\033[1;31m=> Error: $1\033[0m"; }
-# # List item
-# c_list() { echo -e "  \033[1;32m✔\033[0m $1"; }
-# # Error list item
-# e_list() { echo -e "  \033[1;31m✖\033[0m $1"; }
+### NOTICES ###
+# Notice title
+notice() { echo -e "\033[1;32m=> $1\033[0m"; }
+# Notice title
+msg() { echo -e "\033[1;34m=> $1\033[0m"; }
+# Error title
+error() { echo -e "\033[1;31m=> Error: $1\033[0m"; }
+# List item
+c_list() { echo -e "  \033[1;32m✔\033[0m $1"; }
+# Error list item
+e_list() { echo -e "  \033[1;31m✖\033[0m $1"; }
 
 # Update Helpers
 alias brup="brew update; brew upgrade; brew cleanup"
