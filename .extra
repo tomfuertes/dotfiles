@@ -84,8 +84,6 @@ alias prune='git branch --merged | grep -v "\*" | egrep -v "master\|development"
 
 # subl -> code
 alias subl=code
-alias pub='git push; git push heroku'
-
 
 # Larger bash history (default is 500)
 export HISTSIZE=10000000
@@ -129,6 +127,7 @@ alias gemup="gem update --system && rvm get stable"
 alias gup="gg ~/sandbox/git-repos/*"
 alias pup="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U"
 alias gst="gs ~/sandbox/git-repos/*"
+alias pub='git push; git push heroku'
 
 alias up="\
   notice 'Software Update'; \
