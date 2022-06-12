@@ -129,8 +129,9 @@ alias pup="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip inst
 alias gst="gs ~/sandbox/git-repos/*"
 alias si='git commit -am ":shipit:"'
 alias sip='si && git push'
-alias pub='git push && git push heroku && heroku logs -t'
+alias pub='git push && git push heroku'
 alias gpp='si && pub'
+alias hlt="heroku logs --tail"
 
 alias up="\
   notice 'Software Update'; \
