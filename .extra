@@ -127,8 +127,9 @@ alias gemup="gem update --system && rvm get stable"
 alias gup="gg ~/sandbox/git-repos/*"
 alias pup="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U"
 alias gst="gs ~/sandbox/git-repos/*"
-alias gpp='git commit -am ":shipit:" && git push && git push heroku'
-alias pub='git push && git push heroku'
+alias si='git commit -am ":shipit:"'
+alias pub='git push && git push heroku && heroku logs -t'
+alias gpp='si && pub'
 
 alias up="\
   notice 'Software Update'; \
