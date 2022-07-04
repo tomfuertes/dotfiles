@@ -132,6 +132,8 @@ alias sip='si && git push'
 alias pub='git push && git push heroku'
 alias gpp='si && pub'
 alias hlt="heroku logs --tail"
+alias hltr="heroku logs --tail -n 1000 -r heroku"
+alias hlts="heroku logs --tail -n 1000 -r staging"
 
 alias up="\
   notice 'Software Update'; \
