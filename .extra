@@ -197,3 +197,6 @@ function gz() {
 
 alias c="clear"
 alias G="gh browse"
+
+alias taillog="tail -f log/development.log"
+alias tailog="taillog"
