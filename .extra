@@ -143,7 +143,9 @@ alias hlts="heroku logs --tail -n 1000 -r staging"
 
 alias up="\
   notice 'Software Update'; \
-  sudo softwareupdate -i -a; \
+  echo ''; \
+  echo 'sudo softwareupdate -i -a'; \
+  echo ''; \
   notice '~/sandbox/git-repos/* Update'; \
   gup; \
   notice 'Brew Update'; \
