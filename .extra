@@ -146,6 +146,8 @@ alias up="\
   echo ''; \
   echo 'sudo softwareupdate -i -a'; \
   echo ''; \
+  echo 'xcode-select --install'; \
+  echo ''; \
   notice '~/sandbox/git-repos/* Update'; \
   gup; \
   notice 'Brew Update'; \
