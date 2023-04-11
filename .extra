@@ -16,6 +16,8 @@ function custom-brew-install() {
   brew install z
 }
 
+alias pip=/usr/local/bin/pip3
+alias python=/usr/local/bin/python3
 
 # Git credentials
 # Not in the repository, to prevent people from accidentally committing under my name
