@@ -150,11 +150,11 @@ alias up="\
   echo ''; \
   echo 'xcode-select --install'; \
   echo ''; \
-  notice '~/sandbox/git-repos/* Update'; \
-  gup; \
   notice 'Brew Update'; \
   brup; \
 "
+# notice '~/sandbox/git-repos/* Update'; \
+# gup; \
 #   notice 'NPM Update'; \
 #   nup; \
 #   notice 'Gem Update'; \
