@@ -14,6 +14,12 @@ function custom-brew-install() {
   brew install the_silver_searcher
   brew install wget
   brew install z
+
+  brew install rbenv ruby-build
+
+  # Assuming ZSH
+  mkdir -p "$HOME/.zsh"
+  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 }
 
 alias pip=/opt/homebrew/bin/pip3
