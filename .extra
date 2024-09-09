@@ -1,7 +1,6 @@
 # TomF Specific brews and startup installs
 function custom-brew-install() {
   # cat ~/.zshrc and run those
-  mkdir -p "$HOME/.nvm"
   mkdir -p "$HOME/.zsh"
 
   # download + install homebrew
@@ -9,7 +8,6 @@ function custom-brew-install() {
   brew install git-flow
   brew tap heroku/brew && brew install heroku
   brew uninstall node
-  brew install nvm
   brew install redis
   brew install the_silver_searcher
   brew install wget
@@ -75,10 +73,6 @@ ulimit -n 2560
 # https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 
 # minor aliases
@@ -95,6 +89,7 @@ alias todo="subl ~/Dropbox/todo.txt"
 alias prune='git branch --merged | grep -v "\*" | egrep -v "master\|development" | xargs -n 1 git branch -d'
 
 # subl -> code
+alias code="cursor"
 alias subl=code
 
 # Larger bash history (default is 500)
