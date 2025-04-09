@@ -25,7 +25,7 @@ alias python=/opt/homebrew/bin/python3
 
 # Git credentials
 # Not in the repository, to prevent people from accidentally committing under my name
-GIT_AUTHOR_NAME="Tom Fuertes"
+GIT_AUTHOR_NAME="tomfuertes"
 GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 git config --global user.name "$GIT_AUTHOR_NAME"
 GIT_AUTHOR_EMAIL="tomfuertes@gmail.com"
@@ -54,7 +54,7 @@ git config --global alias.hs 'flow hotfix start'
 git config --global alias.hf 'flow hotfix finish'
 git config --global alias.hl 'flow hotfix list'
 git config --global alias.hc 'flow hotfix checkout'
-git config --global commit.gpgsign false
+git config --global commit.gpgsign true
 git config --global merge.ff no
 
 # Add Visual Studio Code (code)
