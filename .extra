@@ -55,6 +55,7 @@ git config --global alias.hf 'flow hotfix finish'
 git config --global alias.hl 'flow hotfix list'
 git config --global alias.hc 'flow hotfix checkout'
 git config --global commit.gpgsign true
+# git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global gpg.format ssh
 git config --global merge.ff no
 
