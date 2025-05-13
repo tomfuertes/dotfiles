@@ -21,6 +21,7 @@ fi
 # Define excluded files/patterns
 EXCLUDES=(
 	".git*"
+	".vscode"
 	".DS_Store"
 	".osx"
 	"bootstrap.sh"
