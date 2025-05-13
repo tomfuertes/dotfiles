@@ -37,76 +37,68 @@ function show_diff() {
 }
 
 function doIt() {
-	# Create temporary directories for dry run and diff checking
-	local temp_diff=$(mktemp -d)
-	local temp_home=$(mktemp -d)
+	# Exclusion list for files not to be synced
+	local exclude_files=(
+		".git"
+		".DS_Store"
+		".osx"
+		"bootstrap.sh"
+		"README.md"
+		"LICENSE-MIT.txt"
+	)
 
-	# Perform a dry run to see what would be copied
-	rsync --dry-run --exclude ".git/" \
-		--exclude ".DS_Store" \
-		--exclude ".osx" \
-		--exclude "bootstrap.sh" \
-		--exclude "README.md" \
-		--exclude "LICENSE-MIT.txt" \
-		-avh --no-perms . "$temp_diff"
+	# Build exclude pattern for rsync
+	local exclude_args=()
+	for file in "${exclude_files[@]}"; do
+		exclude_args+=("--exclude=$file")
+	done
 
-	# Check if there are any files to be synced
-	if [ -z "$(ls -A "$temp_diff")" ]; then
-		echo "No files to sync."
-		rm -rf "$temp_diff" "$temp_home"
-		return
-	fi
-
-	# Perform a dry run to home directory for comparison
-	rsync --dry-run --exclude ".git/" \
-		--exclude ".DS_Store" \
-		--exclude ".osx" \
-		--exclude "bootstrap.sh" \
-		--exclude "README.md" \
-		--exclude "LICENSE-MIT.txt" \
-		-avh --no-perms . "$temp_home"
-
-	# Show diffs for each file
-	echo "Files to be synced:"
+	# Find files to sync
 	local files_to_sync=()
 	while IFS= read -r -d '' source_file; do
 		# Get relative path
-		rel_path="${source_file#$temp_diff/}"
+		rel_path="${source_file#./}"
 		dest_file="$HOME/$rel_path"
 
 		# Print filename
-		echo "File: $rel_path"
+		echo "Checking file: $rel_path"
 
 		# Show diff if file exists
 		if [ -f "$dest_file" ]; then
-			show_diff "$source_file" "$dest_file"
+			if ! cmp -s "$source_file" "$dest_file"; then
+				echo "Differences found in $rel_path"
+				show_diff "$source_file" "$dest_file"
+				files_to_sync+=("$rel_path")
+			fi
 		else
-			echo "New file will be created"
-		fi
-
-		# Ask for confirmation for each file
-		read -p "Sync this file? (y/N) " -n 1 -r
-		echo ""
-		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			echo "New file will be created: $rel_path"
 			files_to_sync+=("$rel_path")
 		fi
-	done < <(find "$temp_diff" -type f -print0)
+	done < <(find . -type f -print0 "${exclude_args[@]/#/--exclude=}")
 
 	# Confirm overall sync
 	if [ ${#files_to_sync[@]} -eq 0 ]; then
-		echo "No files selected for sync."
-		rm -rf "$temp_diff" "$temp_home"
+		echo "No files to sync."
+		return
+	fi
+
+	# Confirm sync
+	echo "Files to be synced:"
+	printf '%s\n' "${files_to_sync[@]}"
+	read -p "Proceed with sync? (y/N) " -n 1 -r
+	echo ""
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+		echo "Sync cancelled."
 		return
 	fi
 
 	# Perform sync for selected files
 	for file in "${files_to_sync[@]}"; do
 		mkdir -p "$(dirname "$HOME/$file")"
-		cp "$temp_diff/$file" "$HOME/$file"
+		cp "$file" "$HOME/$file"
 	done
 
-	# Clean up temporary directories
-	rm -rf "$temp_diff" "$temp_home"
+	echo "Sync complete."
 
 	# Source appropriate shell configuration
 	if [ -n "$ZSH_VERSION" ]; then
