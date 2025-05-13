@@ -208,6 +208,41 @@ function gz() {
   fi
 }
 
+function gapr() {
+    # Check if a commit message is provided
+    if [ $# -eq 0 ]; then
+        echo "Usage: gapr 'commit message'"
+        return 1
+    fi
+
+    local commit_message="$1"
+
+    # Generate branch name from commit message
+    local branch_name=$(echo "$commit_message" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+
+    # Commit changes
+    git add -A
+    git commit -m "$commit_message"
+
+    # Create and switch to a new branch
+    git checkout -b "$branch_name"
+
+    # Push the branch
+    git push -u origin "$branch_name"
+
+    # Create a pull request
+    gh pr create --title "$commit_message" --body ""
+
+    # Optional: Merge the PR (you might want to confirm this manually)
+    gh pr merge --squash --delete-branch
+
+    # Switch back to staging
+    git checkout staging
+
+    # Pull the latest changes
+    git pull origin staging
+}
+
 alias c="clear"
 alias G="gh browse"
 
