@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Prevent script from being sourced
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+	echo "Error: This script should be executed, not sourced."
+	echo "Use: ./bootstrap.sh instead of source bootstrap.sh"
+	return 1
+fi
+
 # Check if Homebrew is installed
 if ! which brew &>/dev/null; then
 	echo "Homebrew is required to run this script."
@@ -8,7 +15,7 @@ if ! which brew &>/dev/null; then
 	exit 1
 fi
 
-cd "$(dirname "${BASH_SOURCE}")"
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 git pull origin main
 
