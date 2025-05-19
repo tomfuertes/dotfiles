@@ -253,7 +253,7 @@ function gciai {
   DIFF_SUMMARY=$(git diff -w)
 
   # Pass the diff summary (code changes) to Ollama's Gemma3:1b model and get the commit message
-  AI_SUMMARY_MESSAGE=$(ollama run gemma3:1b --prompt "Generate a commit message based on the following code changes: $DIFF_SUMMARY")
+  AI_SUMMARY_MESSAGE=$(ollama run gemma3:1b "Generate a commit message based on the following code changes: $DIFF_SUMMARY")
 
   # If Ollama returns a message, use it as the commit message
   if [[ -n "$AI_SUMMARY_MESSAGE" ]]; then
