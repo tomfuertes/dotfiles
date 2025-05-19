@@ -86,7 +86,7 @@ alias ll="la -h"
 
 # brew install z.sh
 alias j=z
-. `brew --prefix`/etc/profile.d/z.sh
+. $(brew --prefix)/etc/profile.d/z.sh
 
 # todo
 alias todo="subl ~/Dropbox/todo.txt"
@@ -101,19 +101,19 @@ alias subl=code
 # Larger bash history (default is 500)
 export HISTSIZE=10000000
 export SAVEHIST=10000000
-setopt BANG_HIST                 # Treat the '!' character specially during expansion.
-setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
-setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
-setopt SHARE_HISTORY             # Share history between all sessions.
-setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
-setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
-setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
-setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
-setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
-setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
-setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
-setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+setopt BANG_HIST              # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY       # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY     # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY          # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS       # Don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS   # Delete old recorded entry if new entry is a duplicate.
+setopt HIST_FIND_NO_DUPS      # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE      # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS      # Don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS     # Remove superfluous blanks before recording entry.
+setopt HIST_VERIFY            # Don't execute immediately upon history expansion.
+setopt HIST_BEEP              # Beep when accessing nonexistent history.
 
 # Misc settings
 export EDITOR='code -w'
@@ -176,8 +176,8 @@ function gg() {
   if [ $# -gt 0 ]; then
     for i in $(echo $*); do
       if [ -d ${i}/.git ]; then
-        ( msg "Pulling ${i}" && cd ${i} && git pull | grep -vi "Current branch .* is up to date" )
-        ( cd ${i} && git status -s )
+        (msg "Pulling ${i}" && cd ${i} && git pull | grep -vi "Current branch .* is up to date")
+        (cd ${i} && git status -s)
       fi
     done
   else
@@ -189,7 +189,11 @@ function gs() {
   if [ $# -gt 0 ]; then
     for i in $(echo $*); do
       if [ -d ${i}/.git ]; then
-        ( msg "Status ${i}" && cd ${i}; git cherry -v origin/master | wc -l | grep -v ' 0'; git status -s )
+        (
+          msg "Status ${i}" && cd ${i}
+          git cherry -v origin/master | wc -l | grep -v ' 0'
+          git status -s
+        )
       fi
     done
   else
@@ -201,7 +205,7 @@ function gz() {
   if [ $# -gt 0 ]; then
     for i in $(echo $*); do
       if [ -d ${i} ]; then
-        ( msg "Tarring into ~/sandbox/backups/${i%/}.$(date "+%Y-%m-%d-%H-%M-%S").tgz" && tar zcf ~/sandbox/backups/${i%/}.$(date "+%Y-%m-%d-%H-%M-%S").tgz ${i%/} )
+        (msg "Tarring into ~/sandbox/backups/${i%/}.$(date "+%Y-%m-%d-%H-%M-%S").tgz" && tar zcf ~/sandbox/backups/${i%/}.$(date "+%Y-%m-%d-%H-%M-%S").tgz ${i%/})
       fi
     done
   else
@@ -210,38 +214,53 @@ function gz() {
 }
 
 function gapr() {
-    # Check if a commit message is provided
-    if [ $# -eq 0 ]; then
-        echo "Usage: gapr 'commit message'"
-        return 1
-    fi
+  # Check if a commit message is provided
+  if [ $# -eq 0 ]; then
+    echo "Usage: gapr 'commit message'"
+    return 1
+  fi
 
-    local commit_message="$1"
+  local commit_message="$1"
 
-    # Generate branch name from commit message
-    local branch_name=$(echo "$commit_message" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+  # Generate branch name from commit message
+  local branch_name=$(echo "$commit_message" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 
-    # Commit changes
-    git add -A
-    git commit -m "$commit_message"
+  # Commit changes
+  git add -A
+  git commit -m "$commit_message"
 
-    # Create and switch to a new branch
-    git checkout -b "$branch_name"
+  # Create and switch to a new branch
+  git checkout -b "$branch_name"
 
-    # Push the branch
-    git push -u origin "$branch_name"
+  # Push the branch
+  git push -u origin "$branch_name"
 
-    # Create a pull request
-    gh pr create --title "$commit_message" --body ""
+  # Create a pull request
+  gh pr create --title "$commit_message" --body ""
 
-    # Optional: Merge the PR (you might want to confirm this manually)
-    gh pr merge --squash --delete-branch
+  # Optional: Merge the PR (you might want to confirm this manually)
+  gh pr merge --squash --delete-branch
 
-    # Switch back to staging
-    git checkout staging
+  # Switch back to staging
+  git checkout staging
 
-    # Pull the latest changes
-    git pull origin staging
+  # Pull the latest changes
+  git pull origin staging
+}
+
+function gciai {
+  # Capture the full git diff output (line-by-line code changes)
+  DIFF_SUMMARY=$(git diff -w)
+
+  # Pass the diff summary (code changes) to Ollama's Gemma3:1b model and get the commit message
+  AI_SUMMARY_MESSAGE=$(ollama run gemma3:1b --prompt "Generate a commit message based on the following code changes: $DIFF_SUMMARY")
+
+  # If Ollama returns a message, use it as the commit message
+  if [[ -n "$AI_SUMMARY_MESSAGE" ]]; then
+    git add . && git commit -m "$AI_SUMMARY_MESSAGE"
+  else
+    echo "Failed to generate commit message"
+  fi
 }
 
 alias c="clear"
