@@ -252,9 +252,18 @@ function gciai {
   # Capture the full git diff output (line-by-line code changes)
   DIFF_SUMMARY=$(git diff -w)
 
-  # Pass the diff summary (code changes) to Ollama's Gemma3:1b model and get the commit message
-  AI_SUMMARY_MESSAGE=$(ollama run gemma3:1b "Generate a commit message based on the following code changes: $DIFF_SUMMARY")
+  echo $DIFF_SUMMARY
 
+  # Pass the diff summary (code changes) to Ollama's Gemma3:1b model and get the commit message
+  OLLAMA_PROMPT="Generate a concise commit message that describes the code changes in the diff below. "
+  OLLAMA_PROMPT+="Focus on the purpose and impact of the changes, and avoid generic prefixes like 'feat' or 'fix'. "
+  OLLAMA_PROMPT+="Only return the commit message, no additional text. "
+  OLLAMA_PROMPT+="Diff: $DIFF_SUMMARY"
+  AI_SUMMARY_MESSAGE=$(ollama run gemma3:1b "$OLLAMA_PROMPT")
+
+  echo ""
+  echo "Git commit message: $AI_SUMMARY_MESSAGE"
+  echo ""
   # If Ollama returns a message, use it as the commit message
   if [[ -n "$AI_SUMMARY_MESSAGE" ]]; then
     git add . && git commit -m "$AI_SUMMARY_MESSAGE"
