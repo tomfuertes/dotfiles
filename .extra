@@ -265,7 +265,7 @@ function gciai {
   echo ""
   # If Ollama returns a message, use it as the commit message
   if [[ -n "$AI_SUMMARY_MESSAGE" ]]; then
-    read -p "Commit with this message? (Y/n) " -n 1 -r confirmation
+    read -r -n 1 "confirmation?Commit with this message? (Y/n) "
     if [[ -z "$confirmation" || "$confirmation" == "y" || "$confirmation" == "Y" ]]; then
       git add . && git commit -m "$AI_SUMMARY_MESSAGE"
     else
