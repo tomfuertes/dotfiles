@@ -277,6 +277,12 @@ function gciai {
   fi
 }
 
+function gss() {
+  git status
+  echo "\nShowing diffs for local unpushed commits:\n"
+  git show @{u}.. -w
+}
+
 alias c="clear"
 alias G="gh browse"
 
