@@ -270,22 +270,29 @@ function gciai {
   # Prepare prompt for OpenAI
   OPENAI_PROMPT="Generate a concise commit message that describes the code changes in the diff below. Focus on the purpose and impact of the changes. Only return the commit message, no additional text, padding, or string characters. Diff: $DIFF_SUMMARY"
 
-  # Call OpenAI API (gpt-3.5-turbo)
-  AI_SUMMARY_MESSAGE=$(curl https://api.openai.com/v1/chat/completions \
-    -sS \
+  # Call OpenAI API (gpt-3.5-turbo) with verbose output
+  API_RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
+    -v \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $OPENAI_KEY" \
     -d '{
       "model": "gpt-3.5-turbo",
       "messages": [{"role": "user", "content": '"'"$OPENAI_PROMPT"'"'}],
       "max_tokens": 64
-    }' | jq -r '.choices[0].message.content')
+    }' 2>&1)
+
+  AI_SUMMARY_MESSAGE=$(echo "$API_RESPONSE" | jq -r '.choices[0].message.content')
 
   echo ""
   echo "Git commit message: $AI_SUMMARY_MESSAGE"
   echo ""
-  # If OpenAI returns a message, use it as the commit message
-  if [[ -n "$AI_SUMMARY_MESSAGE" && "$AI_SUMMARY_MESSAGE" != "null" ]]; then
+
+  if [[ -z "$AI_SUMMARY_MESSAGE" || "$AI_SUMMARY_MESSAGE" == "null" ]]; then
+    echo "---- FULL API RESPONSE ----"
+    echo "$API_RESPONSE"
+    echo "--------------------------"
+    echo "Failed to generate commit message"
+  else
     echo -n "Commit with this message? (Y/n) "
     read -k 1 confirmation
     echo
@@ -294,8 +301,6 @@ function gciai {
     else
       echo "Commit aborted by user."
     fi
-  else
-    echo "Failed to generate commit message"
   fi
 }
 
