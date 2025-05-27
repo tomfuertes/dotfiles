@@ -8,6 +8,7 @@ function custom-brew-install() {
   brew install gh
   brew install git-flow
   brew tap heroku/brew && brew install heroku
+  brew install jq
   brew uninstall node
   brew install redis
   brew install the_silver_searcher
@@ -252,20 +253,41 @@ function gciai {
   # Capture the full git diff output (line-by-line code changes)
   DIFF_SUMMARY=$(git diff -w)
 
-  echo $DIFF_SUMMARY
+  echo "$DIFF_SUMMARY"
 
-  # Pass the diff summary (code changes) to Ollama's Gemma3:1b model and get the commit message
-  OLLAMA_PROMPT="Generate a concise commit message that describes the code changes in the diff below. "
-  OLLAMA_PROMPT+="Focus on the purpose and impact of the changes. Only return the commit message, no additional text, padding, or string characters."
-  OLLAMA_PROMPT+="Diff: $DIFF_SUMMARY"
-  AI_SUMMARY_MESSAGE=$(ollama run devstral --verbose "$OLLAMA_PROMPT")
+  # Prepare OpenAI key
+  KEY_FILE="$HOME/.open-ai-key"
+  if [ ! -f "$KEY_FILE" ]; then
+    echo "OpenAI API key not found."
+    read -rsp "Enter your OpenAI API key: " OPENAI_KEY
+    echo
+    echo "$OPENAI_KEY" >"$KEY_FILE"
+    chmod 600 "$KEY_FILE"
+  else
+    OPENAI_KEY=$(cat "$KEY_FILE")
+  fi
+
+  # Prepare prompt for OpenAI
+  OPENAI_PROMPT="Generate a concise commit message that describes the code changes in the diff below. Focus on the purpose and impact of the changes. Only return the commit message, no additional text, padding, or string characters. Diff: $DIFF_SUMMARY"
+
+  # Call OpenAI API (gpt-3.5-turbo)
+  AI_SUMMARY_MESSAGE=$(curl https://api.openai.com/v1/chat/completions \
+    -sS \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $OPENAI_KEY" \
+    -d '{
+      "model": "gpt-3.5-turbo",
+      "messages": [{"role": "user", "content": '"'"$OPENAI_PROMPT"'"'}],
+      "max_tokens": 64
+    }' | jq -r '.choices[0].message.content')
 
   echo ""
   echo "Git commit message: $AI_SUMMARY_MESSAGE"
   echo ""
-  # If Ollama returns a message, use it as the commit message
-  if [[ -n "$AI_SUMMARY_MESSAGE" ]]; then
+  # If OpenAI returns a message, use it as the commit message
+  if [[ -n "$AI_SUMMARY_MESSAGE" && "$AI_SUMMARY_MESSAGE" != "null" ]]; then
     read -r -n 1 "confirmation?Commit with this message? (Y/n) "
+    echo
     if [[ -z "$confirmation" || "$confirmation" == "y" || "$confirmation" == "Y" ]]; then
       git add . && git commit -m "$AI_SUMMARY_MESSAGE"
     else
