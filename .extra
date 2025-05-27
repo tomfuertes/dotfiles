@@ -258,8 +258,8 @@ function gciai {
   # Prepare OpenAI key
   KEY_FILE="$HOME/.open-ai-key"
   if [ ! -f "$KEY_FILE" ]; then
-    echo "OpenAI API key not found."
-    read -rsp "Enter your OpenAI API key: " OPENAI_KEY
+    echo -n "Enter your OpenAI API key: "
+    read -s OPENAI_KEY
     echo
     echo "$OPENAI_KEY" >"$KEY_FILE"
     chmod 600 "$KEY_FILE"
@@ -286,7 +286,8 @@ function gciai {
   echo ""
   # If OpenAI returns a message, use it as the commit message
   if [[ -n "$AI_SUMMARY_MESSAGE" && "$AI_SUMMARY_MESSAGE" != "null" ]]; then
-    read -r -n 1 "confirmation?Commit with this message? (Y/n) "
+    echo -n "Commit with this message? (Y/n) "
+    read -k 1 confirmation
     echo
     if [[ -z "$confirmation" || "$confirmation" == "y" || "$confirmation" == "Y" ]]; then
       git add . && git commit -m "$AI_SUMMARY_MESSAGE"
