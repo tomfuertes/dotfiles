@@ -258,7 +258,7 @@ function gciai {
   OLLAMA_PROMPT="Generate a concise commit message that describes the code changes in the diff below. "
   OLLAMA_PROMPT+="Focus on the purpose and impact of the changes. Only return the commit message, no additional text, padding, or string characters."
   OLLAMA_PROMPT+="Diff: $DIFF_SUMMARY"
-  AI_SUMMARY_MESSAGE=$(ollama run gemma3:1b --verbose "$OLLAMA_PROMPT")
+  AI_SUMMARY_MESSAGE=$(ollama run devstral --verbose "$OLLAMA_PROMPT")
 
   echo ""
   echo "Git commit message: $AI_SUMMARY_MESSAGE"
