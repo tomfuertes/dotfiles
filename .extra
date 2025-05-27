@@ -298,9 +298,9 @@ EOF
     echo "Failed to generate commit message"
   else
     echo -n "Commit with this message? (Y/n) "
-    read -k 1 confirmation
+    read -n 1 -r confirmation
     echo
-    if [[ -z "$confirmation" || "$confirmation" == "y" || "$confirmation" == "Y" ]]; then
+    if [[ -z "$confirmation" || "$confirmation" =~ ^[Yy]$ ]]; then
       git add . && git commit -m "$AI_SUMMARY_MESSAGE"
     else
       echo "Commit aborted by user."
