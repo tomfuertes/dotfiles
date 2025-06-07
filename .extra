@@ -319,3 +319,5 @@ alias G="gh browse"
 
 alias taillog="tail -n 50 -f log/development.log"
 alias tailog="taillog"
+
+alias b="npx bun"
