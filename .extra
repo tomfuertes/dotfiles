@@ -268,7 +268,7 @@ function gciai {
   fi
 
   # Prepare prompt for OpenAI
-  OPENAI_PROMPT="Generate a concise commit message that describes the code changes in the diff below. Focus on the purpose and impact of the changes. Only return the commit message, no additional text, padding, or string characters. Diff: $DIFF_SUMMARY"
+  OPENAI_PROMPT="Generate a concise commit message for the code changes in the diff below. Only return the commit message, no additional text, padding, or string characters. Diff: $DIFF_SUMMARY"
 
   # Call OpenAI API (gpt-3.5-turbo) with robust JSON encoding
   API_RESPONSE=$(
