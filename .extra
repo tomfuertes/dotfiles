@@ -308,6 +308,17 @@ EOF
   fi
 }
 
+function udf() {
+  git checkout -b update-deps-$(date +%Y-%m-%d)
+  npx npm-check-updates -u --interactive
+  git add package*
+  git commit -m "npm run update-deps"
+  git push --no-verify
+  gh pr create
+  npm run reset
+  npm run audit
+}
+
 function gss() {
   git status
   echo "\nShowing diffs for local unpushed commits:\n"
