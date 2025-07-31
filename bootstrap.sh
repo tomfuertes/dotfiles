@@ -37,21 +37,17 @@ for item in "${EXCLUDES[@]}"; do
 done
 
 # Show diffs before syncing
-read -p "Preview differences before syncing? (Y/n) " -n 1 -r PREVIEW
+rsync -avhn --itemize-changes $EXCLUDE_PARAMS --out-format="%f" ./ "$HOME/"
 echo ""
-if [[ -z "$PREVIEW" || "$PREVIEW" =~ ^[Yy]$ ]]; then
-	rsync -avhn --itemize-changes $EXCLUDE_PARAMS --out-format="%f" ./ "$HOME/"
-	echo ""
 
-	# For each file that would be transferred, show diff
-	while IFS= read -r file; do
-		if [[ -f "$HOME/$file" && -f "$file" ]]; then
-			echo "Differences in $file:"
-			diff -u "$HOME/$file" "$file" | grep -v "^Only in" || echo "No differences"
-			echo ""
-		fi
-	done < <(rsync -avhn --itemize-changes $EXCLUDE_PARAMS --out-format="%f" ./ "$HOME/" | grep -v "/$" | grep -v "^sending" | grep -v "^sent" | grep -v "^total")
-fi
+# For each file that would be transferred, show diff
+while IFS= read -r file; do
+	if [[ -f "$HOME/$file" && -f "$file" ]]; then
+		echo "Differences in $file:"
+		diff -u "$HOME/$file" "$file" | grep -v "^Only in" || echo "No differences"
+		echo ""
+	fi
+done < <(rsync -avhn --itemize-changes $EXCLUDE_PARAMS --out-format="%f" ./ "$HOME/" | grep -v "/$" | grep -v "^sending" | grep -v "^sent" | grep -v "^total")
 
 # Prompt for confirmation
 read -p "This may overwrite existing files in your home directory. Proceed? (y/N) " -n 1 -r
