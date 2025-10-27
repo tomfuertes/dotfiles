@@ -78,8 +78,8 @@ ulimit -n 2560
 # # rbenv
 # eval "$(rbenv init - zsh)"
 
-# https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+# # https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
+# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 
