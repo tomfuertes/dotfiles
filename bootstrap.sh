@@ -50,9 +50,9 @@ while IFS= read -r file; do
 done < <(rsync -avhn --itemize-changes $EXCLUDE_PARAMS --out-format="%f" ./ "$HOME/" | grep -v "/$" | grep -v "^sending" | grep -v "^sent" | grep -v "^total")
 
 # Prompt for confirmation
-read -p "This may overwrite existing files in your home directory. Proceed? (y/N) " -n 1 -r
+read -p "This may overwrite existing files in your home directory. Proceed? (Y/n) " -n 1 -r
 echo ""
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [[ -z $REPLY || $REPLY =~ ^[Yy]$ ]]; then
 	rsync -av $EXCLUDE_PARAMS ./ "$HOME/"
 	echo "Sync complete."
 
