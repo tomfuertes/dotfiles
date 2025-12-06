@@ -129,12 +129,16 @@ alias tailog="taillog"
 alias b="npx bun"
 
 zipall() {
-  local ts=$(date +%Y%m%d)
+  local ts
+  ts=$(date +%Y%m%d)
 
-  for d in ./*(/N); do
-    echo "Archiving: ${d:t} → ${d:t}-${ts}.tgz"
+  for d in */; do
+    # ensure it's a directory
+    [ -d "$d" ] || continue
 
-    tar -czf "${d:t}-${ts}.tgz" \
+    echo "Archiving: ${d%/} → ${d%/}-${ts}.tgz"
+
+    tar -czf "${d%/}-${ts}.tgz" \
       --exclude="node_modules" \
       "$d"
   done
