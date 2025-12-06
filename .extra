@@ -5,9 +5,7 @@ function custom-brew-install() {
 
   # download + install homebrew
   brew install oven-sh/bun/bun
-  brew install colordiff
   brew install gh
-  brew install git-flow
   brew tap heroku/brew && brew install heroku
   brew install jq
   brew uninstall node
@@ -45,19 +43,6 @@ git config --global fetch.prune true # http://stackoverflow.com/a/8255687/94668
 git config --global pull.rebase true
 git config --global alias.st status
 git config --global alias.ci commit
-git config --global alias.fs 'flow feature start'
-git config --global alias.ff 'flow feature finish'
-git config --global alias.fl 'flow feature list'
-git config --global alias.fc 'flow feature checkout'
-git config --global alias.fr 'flow feature rebase'
-git config --global alias.rs 'flow release start'
-git config --global alias.rf 'flow release finish'
-git config --global alias.rl 'flow release list'
-git config --global alias.rc 'flow release checkout'
-git config --global alias.hs 'flow hotfix start'
-git config --global alias.hf 'flow hotfix finish'
-git config --global alias.hl 'flow hotfix list'
-git config --global alias.hc 'flow hotfix checkout'
 git config --global commit.gpgsign true
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 eval "$(ssh-agent -s)"
@@ -71,27 +56,12 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 # ulimit
 ulimit -n 2560
 
-# Happens in zshrc
-# # rvm
-# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-# # rbenv
-# eval "$(rbenv init - zsh)"
-
-# # https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
-# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
-
-[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
-
 # minor aliases
 alias ll="la -h"
 
 # brew install z.sh
 alias j=z
 . $(brew --prefix)/etc/profile.d/z.sh
-
-# todo
-alias todo="subl ~/Dropbox/todo.txt"
 
 # http://stackoverflow.com/a/26803738/94668
 alias prune='git branch --merged | grep -v "\*" | egrep -v "master\|development" | xargs -n 1 git branch -d'
@@ -135,178 +105,9 @@ e_list() { echo -e "  \033[1;31m✖\033[0m $1"; }
 
 # Update Helpers
 alias brup="brew update; brew upgrade; brew cleanup"
-alias nup="npm install -g npm@latest; npm update -g --quiet"
-alias dup=". ~/sandbox/git-repos/dotfiles/bootstrap.sh -f"
-alias gemup="gem update --system && rvm get stable"
-alias gup="gg ~/sandbox/git-repos/*"
-alias pup="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U"
-alias gst="gs ~/sandbox/git-repos/*"
-alias si='git commit -am ":shipit:"'
-alias sip='si && git push'
-alias pub='git push && git push heroku'
-alias puba='git push && git push staging && git push heroku'
-alias puball='puba'
-alias gpp='si && pub'
-alias hlt="heroku logs --tail"
-alias hltr="heroku logs --tail -n 1000 -r heroku"
-alias hlts="heroku logs --tail -n 1000 -r staging"
-
-alias up="\
-  notice 'Software Update'; \
-  echo ''; \
-  echo 'sudo softwareupdate -i -a'; \
-  echo ''; \
-  echo 'xcode-select --install'; \
-  echo ''; \
-  notice 'Brew Update'; \
-  brup; \
-"
-# notice '~/sandbox/git-repos/* Update'; \
-# gup; \
-#   notice 'NPM Update'; \
-#   nup; \
-#   notice 'Gem Update'; \
-#   gemup; \
-#   notice 'Pip Update'; \
-#   pup; \
-#   notice '~/.dotfiles Update'; \
-#   dup; \
-#"
-
-function gg() {
-  if [ $# -gt 0 ]; then
-    for i in $(echo $*); do
-      if [ -d ${i}/.git ]; then
-        (msg "Pulling ${i}" && cd ${i} && git pull | grep -vi "Current branch .* is up to date")
-        (cd ${i} && git status -s)
-      fi
-    done
-  else
-    echo "usage: gg <git repo dir>"
-  fi
-}
-
-function gs() {
-  if [ $# -gt 0 ]; then
-    for i in $(echo $*); do
-      if [ -d ${i}/.git ]; then
-        (
-          msg "Status ${i}" && cd ${i}
-          git cherry -v origin/master | wc -l | grep -v ' 0'
-          git status -s
-        )
-      fi
-    done
-  else
-    echo "usage: gst <git repo dir>"
-  fi
-}
-
-function gz() {
-  if [ $# -gt 0 ]; then
-    for i in $(echo $*); do
-      if [ -d ${i} ]; then
-        (msg "Tarring into ~/sandbox/backups/${i%/}.$(date "+%Y-%m-%d-%H-%M-%S").tgz" && tar zcf ~/sandbox/backups/${i%/}.$(date "+%Y-%m-%d-%H-%M-%S").tgz ${i%/})
-      fi
-    done
-  else
-    echo "usage: gz <dir name>"
-  fi
-}
-
-function gapr() {
-  # Check if a commit message is provided
-  if [ $# -eq 0 ]; then
-    echo "Usage: gapr 'commit message'"
-    return 1
-  fi
-
-  local commit_message="$1"
-
-  # Generate branch name from commit message
-  local branch_name=$(echo "$commit_message" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
-
-  # Commit changes
-  git add -A
-  git commit -m "$commit_message"
-
-  # Create and switch to a new branch
-  git checkout -b "$branch_name"
-
-  # Push the branch
-  git push -u origin "$branch_name"
-
-  # Create a pull request
-  gh pr create --title "$commit_message" --body ""
-
-  # Optional: Merge the PR (you might want to confirm this manually)
-  gh pr merge --squash --delete-branch
-
-  # Switch back to staging
-  git checkout staging
-
-  # Pull the latest changes
-  git pull origin staging
-}
-
-function gciai {
-  # Capture the full git diff output (line-by-line code changes)
-  DIFF_SUMMARY=$(git diff -w)
-
-  echo "$DIFF_SUMMARY"
-
-  # Prepare OpenAI key
-  KEY_FILE="$HOME/.open-ai-key"
-  if [ ! -f "$KEY_FILE" ]; then
-    echo -n "Enter your OpenAI API key: "
-    read -s OPENAI_KEY
-    echo
-    echo "$OPENAI_KEY" >"$KEY_FILE"
-    chmod 600 "$KEY_FILE"
-  else
-    OPENAI_KEY=$(cat "$KEY_FILE")
-  fi
-
-  # Prepare prompt for OpenAI
-  OPENAI_PROMPT="Generate a concise commit message for the code changes in the diff below. Only return the commit message, no additional text, padding, or string characters. Diff: $DIFF_SUMMARY"
-
-  # Call OpenAI API (gpt-3.5-turbo) with robust JSON encoding
-  API_RESPONSE=$(
-    curl https://api.openai.com/v1/chat/completions \
-      -sS \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OPENAI_KEY" \
-      -d @- <<EOF
-{
-  "model": "gpt-3.5-turbo",
-  "messages": [{"role": "user", "content": $(jq -Rs . <<<"$OPENAI_PROMPT")}],
-  "max_tokens": 64
-}
-EOF
-  )
-
-  AI_SUMMARY_MESSAGE=$(echo "$API_RESPONSE" | jq -r '.choices[0].message.content')
-
-  echo ""
-  echo "Git commit message: $AI_SUMMARY_MESSAGE"
-  echo ""
-
-  if [[ -z "$AI_SUMMARY_MESSAGE" || "$AI_SUMMARY_MESSAGE" == "null" ]]; then
-    echo "---- FULL API RESPONSE ----"
-    echo "$API_RESPONSE"
-    echo "--------------------------"
-    echo "Failed to generate commit message"
-  else
-    echo -n "Commit with this message? (Y/n) "
-    read -n 1 confirmation
-    echo
-    if [[ -z "$confirmation" || "$confirmation" =~ ^[Yy]$ ]]; then
-      git add . && git commit -m "$AI_SUMMARY_MESSAGE"
-    else
-      echo "Commit aborted by user."
-    fi
-  fi
-}
+# alias hlt="heroku logs --tail"
+# alias hltr="heroku logs --tail -n 1000 -r heroku"
+# alias hlts="heroku logs --tail -n 1000 -r staging"
 
 function udf() {
   git checkout -b update-deps-$(date +%Y-%m-%d)
@@ -319,12 +120,6 @@ function udf() {
   npm run audit
 }
 
-function gss() {
-  git status
-  echo "\nShowing diffs for local unpushed commits:\n"
-  git show @{u}.. -w
-}
-
 alias c="clear"
 alias G="gh browse"
 
@@ -332,3 +127,15 @@ alias taillog="tail -n 50 -f log/development.log"
 alias tailog="taillog"
 
 alias b="npx bun"
+
+zipall() {
+  local ts=$(date +%Y%m%d)
+
+  for d in ./*(/N); do
+    echo "Archiving: ${d:t} → ${d:t}-${ts}.tgz"
+
+    tar -czf "${d:t}-${ts}.tgz" \
+      --exclude="node_modules" \
+      "$d"
+  done
+}
