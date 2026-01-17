@@ -42,6 +42,9 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
+# always private gists
+alias gist='gh gist create'
+
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
 
