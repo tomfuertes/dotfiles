@@ -63,6 +63,15 @@ alias ll="la -h"
 alias j=z
 . $(brew --prefix)/etc/profile.d/z.sh
 
+# fnm (Fast Node Manager)
+if command -v fnm &> /dev/null; then
+  if [ -n "$ZSH_VERSION" ]; then
+    eval "$(fnm env --use-on-cd --shell zsh)"
+  elif [ -n "$BASH_VERSION" ]; then
+    eval "$(fnm env --use-on-cd --shell bash)"
+  fi
+fi
+
 # http://stackoverflow.com/a/26803738/94668
 alias prune='git branch --merged | grep -v "\*" | egrep -v "master\|development" | xargs -n 1 git branch -d'
 
