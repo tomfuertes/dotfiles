@@ -53,6 +53,9 @@ git config --global merge.ff no
 # Add Visual Studio Code (code)
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
+# Add .local/bin to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
 # ulimit
 ulimit -n 2560
 
